@@ -9,15 +9,6 @@ import java.util.*;
 
 // DONE by Artem Chebotarov as recruitment task by Orange company
 
-//**************************** Warning *********************************
-//
-// Solution requires by user to enter in calendar1 and calendar2
-// planned meetings ONLY in ASCENDING order by time. In other case
-// I'm not sure that it will work correctly.
-//
-//**********************************************************************
-
-
 public class Main {
 
     private static final LocalTime DURATION = LocalTime.parse("00:30");
