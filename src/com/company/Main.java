@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.time.LocalTime;
 import java.util.*;
 
-// DONE by Artem Chebotarov as recruitment task by Orange company
+// DONE by Artem Chebotarov as recruitment task by Orange
 
 public class Main {
 
@@ -28,24 +28,27 @@ public class Main {
         File file = new File(path);
         Scanner sc = new Scanner(file);
 
-        String out = "";
+        StringBuilder out = new StringBuilder();
         while (sc.hasNextLine())
-            out += sc.nextLine() + "\n";
+            out.append(sc.nextLine()).append("\n");
 
-        return out;
+        return out.toString();
     }
 
     // org.json - library for parsing String to JSON and operating on it
+    // org.json - biblioteka do parsowania String do JSON i działania na nim
     private static JSONObject getJSONCalendar(String calendar) {
         return new JSONObject(calendar);
     }
 
     // Method that makes better comparing of times, it converts time (hh:mm) to minutes
+    // Metoda, dla lepszego porównania czasu, konwertuje czas (gg:mm) na minuty
     private static long toMinutes(LocalTime time) {
         return time.getHour()*60 + time.getMinute();
     }
 
     // Method gets free intervals of time for given calendar
+    // Metoda otrzymuje wolne przedziały czasu dla danego kalendarza
     private static List<Interval> getFreeTime(JSONObject calendar) {
         JSONArray arr = calendar.getJSONArray("planned_meeting");
         List<Interval> plannedMeetings = new ArrayList<>();
@@ -72,7 +75,7 @@ public class Main {
 
     // This method return list of intervals in which can be organized meeting. This intervals fit to both of schedules
 
-    //********************************* Explanation *************************************
+    //********************************* Explanation (English) *************************************
     // 1. For each interval in calendar1FreeTime we check
     //    1a. Is start time of interval is between start time and and end time of some interval of calendar2FreeTime?
     //    1b. Is end time of interval is between start time and and end time of some interval of calendar2FreeTime?
@@ -82,6 +85,17 @@ public class Main {
     //    intervals from calendar1FreeTime and calendar2FreeTime
     // 3. We check if new interval is counted on DURATION of possible meeting (endTime - startTime can not be less of DURATION)
     // 4. Finally, interval is added to list of appropriate times for meeting if all conditions are satisfied
+    //***********************************************************************************
+    //********************************* Wyjaśnienie (Polski) *************************************
+    // 1. Dla każdego interwału w calendar1FreeTime sprawdzamy
+    //    1a. a. Czy czas rozpoczęcia interwału jest między czasem rozpoczęcia a czasem zakończenia jednego z interwałów calendar2FreeTime?
+    //    1b. Czy czas zakończenia interwału jest między czasem rozpoczęcia a czasem zakończenia jakiegoś interwału calendar2FreeTime?
+    //    1c. A może czas rozpoczęcia interwału jest równy czasowi rozpoczęcia jakiegoś interwału calendar2FreeTime (taki sam dla czasu zakończenia)?
+    // 2. Jeśli niektóre z tych warunków przeszli:
+    //    Tworzymy nowy Interwał, w którym czas rozpoczęcia będzie MAKSYMALNY czas, a czas zakończenia będzie MINIMALNY czas pomiędzy
+    //    interwałami z calendar1FreeTime i calendar2FreeTime
+    // 3. Sprawdzamy, czy nowy interwał liczony jest w CZASIE możliwego spotkania (endTime - startTime nie może być mniejszy niż DURATION)
+    // 4. Na koniec dodawany jest odstęp do listy odpowiednich czasów do spełnienia, jeśli wszystkie warunki są spełnione
     //***********************************************************************************
 
     private static List<Interval> getAppropriateTime(List<Interval> calendar1FreeTime, List<Interval> calendar2FreeTime) {
